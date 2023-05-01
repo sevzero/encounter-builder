@@ -30,8 +30,14 @@
 <script>
 
     import ButtonCounter from 'src/components/utility/ButtonCounter.vue';
+    import { EncounterStore } from 'stores/encounter';
 
     export default {
+
+        setup() {
+            const encounter = EncounterStore();
+            return { encounter }
+        },
 
         mounted() {
             this.qty = this.creature.qty
@@ -40,10 +46,10 @@
         methods: {
             qtyChanged(val) {
                 if (val <= 0) {
-                    this.$emit('removeCreature', this.creature);
+                    this.encounter.removeCreature(this.creature);
                 }
                 else {
-                    this.$emit('changeQty', val, this.creature);
+                    this.encounter.changeQty(val, this.creature);
                 }
             }
         },
@@ -56,7 +62,7 @@
                     return ['weak', 'base', 'elite'][this.creature.strength + 1];
                 },
                 set(val) {
-                    this.$emit('changeStrength', val, this.creature)
+                    this.encounter.changeStrength(val, this.creature);
                 }
             },
         },

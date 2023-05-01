@@ -21,13 +21,13 @@
                     <q-item>
                         <q-item-section>
                             <div style="text-align: center">Party Level</div>
-                            <button-counter :min="1" :value="partyLevel" label="Party Level" type="number" @change="val => $emit('partyLevelChange', val)"></button-counter>
+                            <button-counter :min="1" :value="party.level" label="Party Level" type="number" @change="val => setLevel(val)"></button-counter>
                         </q-item-section>
                     </q-item>
                     <q-item>
                         <q-item-section>
                             <div style="text-align: center">Party Size</div>
-                            <button-counter :min="1" :value="partySize" label="Party Size" type="number" @change="val => $emit('partySizeChange', val)"></button-counter>
+                            <button-counter :min="1" :value="party.size" label="Party Size" type="number" @change="val => setSize(val)"></button-counter>
                         </q-item-section>
                     </q-item>
                 </q-list>
@@ -48,8 +48,14 @@
 <script>
 
     import ButtonCounter from 'src/components/utility/ButtonCounter.vue';
+    import { PartyStore } from 'stores/party';
 
     export default {
+
+        setup() {
+            const party = PartyStore();
+            return { party }
+        },
 
         mounted() {
             //this.levelRange = {min: this.partyLevel - 4, max: this.partyLevel + 4};
@@ -57,7 +63,14 @@
         },
 
         methods: {
-
+            setLevel(level) {
+                localStorage.setItem('partyLevel', level);
+                this.party.setLevel(level);
+            },
+            setSize(size) {
+                localStorage.setItem('partySize', size);
+                this.party.setSize(size);
+            }
         },
 
         data: () => ({

@@ -2,14 +2,14 @@
     <div>
         <q-banner inline-actions class="bg-dark text-white">
             Encounter Cost: {{ encounterCost }}
-            <div v-if="partySize != 4"><small>Awarded XP: {{ Math.floor(encounterCost * 4 / partySize) }}</small></div>
+            <div v-if="party.size != 4"><small>Awarded XP: {{ Math.floor(encounterCost * 4 / party.size) }}</small></div>
             <template v-slot:action>
                 
             </template>
         </q-banner>
         <div class="encounter-container">
             <EncounterListItem 
-                v-for="creature in encounter"
+                v-for="creature in encounter.creatures"
                 :key="creature.id"
                 :creature="creature"
                 @removeCreature="item => $emit('removeEncounterListItem', item)"
@@ -23,28 +23,38 @@
 <script>
     
     import EncounterListItem from 'src/components/EncounterListItem.vue';
-    
+    import { PartyStore } from 'stores/party';
+    import { EncounterStore } from 'stores/encounter';
+
     export default {
+
+        setup() {
+            const party = PartyStore();
+            const encounter = EncounterStore();
+            return { party, encounter }
+        },
+
         mounted() {
-    },
+        
+        },
     
-    methods: {
+        methods: {
 
-    },
-    
-    computed: {
-        encounterCost() {
-            return this.encounter.reduce((acc, curr) => acc + curr.xp, 0);
-        }   
-    },
+        },
+        
+        computed: {
+            encounterCost() {
+                return this.encounter.creatures.reduce((acc, curr) => acc + curr.xp, 0);
+            }   
+        },
 
-    data: () => ({
-        components: { EncounterListItem },
-    }),
-    
-    props: ['encounter', 'partySize'],
+        data: () => ({
+            components: { EncounterListItem },
+        }),
+        
+        props: [],
 
-    components: { EncounterListItem }
-}
+        components: { EncounterListItem }
+    }
 </script>
   

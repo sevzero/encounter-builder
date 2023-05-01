@@ -14,7 +14,7 @@
          }"
         dense
         class="creature-table"
-        @row-click="(evt, row, index) => $emit('creature-added', row)"
+        @row-click="(evt, row, index) => encounter.addCreature(row)"
         selection="single"
         hide-bottom
         style="bottom: 0;"
@@ -25,9 +25,16 @@
     </q-table>
     </div>
 </template>
-  
+
 <script>
+    import { EncounterStore } from 'stores/encounter';
+    
     export default {
+
+        setup() {
+            const encounter = EncounterStore();
+            return { encounter }
+        },
 
         mounted() {
             this.fetchData();
